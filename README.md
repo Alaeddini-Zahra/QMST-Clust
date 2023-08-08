@@ -5,12 +5,9 @@ This package implements a Q-learning algorithm for finding the minimum spanning 
 ## Installation
 
 You can install the required packages using pip
-require packages : numpy, igraph, matplotlib, pandas, scikit-learn
+require packages: numpy, igraph, matplotlib, pandas, scikit-learn
 
 ## Usage
 
 import QMST-Clust
-
-# Example code goes here
-
 QMST_Clust.main()
