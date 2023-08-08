@@ -6,11 +6,11 @@ This package implements a Q-learning algorithm for finding the minimum spanning 
 
 You can install the required packages using pip
 
-## Required Packages
+### Required Packages
 require packages: numpy, igraph, matplotlib, pandas, scikit-learn
 
-## Usage
+### Usage
 import QMST-Clust
 
-### Example 
+##### Example 
 QMST_Clust.main()
