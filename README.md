@@ -1,5 +1,3 @@
-# Developed by
-Zahra Alaeddini, Mehdi Ashraphijuo
 # QMST-Clust
 This package implements a Q-learning algorithm for finding the minimum spanning tree (MST) of a graph based on cluster-wise objects.
 
