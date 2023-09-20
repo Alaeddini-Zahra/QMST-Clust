@@ -1,5 +1,5 @@
 # QMST-Clust
-This package implements a Q-learning algorithm for finding the minimum spanning tree (MST) of a graph based on cluster-wise objects.
+This package implements a Q-learning algorithm for finding the minimum spanning tree (MST) on cluster-wise objects.
 
 ## Installation
 
