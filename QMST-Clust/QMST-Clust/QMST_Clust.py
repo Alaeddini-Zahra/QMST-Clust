@@ -38,12 +38,6 @@ def epsilon_greedy(Q_values, episode, epsilon=0.1):
         action = np.argmin(Q_values)  # Select the action with the minimum Q-value
     return action
 
-def dfs(graph, visited, node):
-    visited[node] = True
-    for i in range(len(graph)):
-        if graph[node][i] != 0 and not visited[i]:
-            dfs(graph, visited, i)
-
 def get_minimum_spanning_tree(Q_table):
     num_nodes = len(Q_table)
     MST = np.zeros_like(Q_table)
