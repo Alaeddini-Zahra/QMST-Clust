@@ -30,6 +30,7 @@ def q_learning(graph, num_episodes, learning_rate, discount_factor):
                 break
     return Q
 
+
 def epsilon_greedy(Q_values, episode, epsilon=0.1):
     # Exploration or exploitation strategy
     if np.random.uniform(0, 1) < epsilon:
@@ -37,6 +38,7 @@ def epsilon_greedy(Q_values, episode, epsilon=0.1):
     else:
         action = np.argmin(Q_values)  # Select the action with the minimum Q-value
     return action
+
 
 def get_minimum_spanning_tree(Q_table):
     num_nodes = len(Q_table)
@@ -129,7 +131,6 @@ def main():
             cluster_counts[column_clusters[i], column_clusters[j]] += counts[i, j]
             cluster_counts[column_clusters[j], column_clusters[i]] += counts[j, i]
 
-
     learning_rate = 0.1
     discount_factor = 0.9
     num_episodes = 1000
@@ -155,6 +156,7 @@ def main():
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time: {execution_time} seconds")
+
 
 if __name__ == '__main__':
     main()
