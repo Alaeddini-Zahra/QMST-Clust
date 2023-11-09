@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.cluster import KMeans
 
-
 def q_learning(graph, num_episodes, learning_rate, discount_factor):
     Q = np.ones((len(graph), len(graph)))
     for episode in range(num_episodes):
@@ -30,7 +29,6 @@ def q_learning(graph, num_episodes, learning_rate, discount_factor):
                 break
     return Q
 
-
 def epsilon_greedy(Q_values, epsilon=0.1):
     # Exploration or exploitation strategy
     if np.random.uniform(0, 1) < epsilon:
@@ -38,7 +36,6 @@ def epsilon_greedy(Q_values, epsilon=0.1):
     else:
         action = np.argmin(Q_values)  # Select the action with the minimum Q-value
     return action
-
 
 def get_minimum_spanning_tree(Q_table):
     num_nodes = len(Q_table)
@@ -86,7 +83,6 @@ def get_minimum_spanning_tree(Q_table):
 
     return MST
 
-
 def plot_graph(graph, MST, column_clusters, cluster_colors):
     # Create an igraph graph from the adjacency matrix
     g = igraph.Graph.Adjacency(graph.tolist())
@@ -110,7 +106,6 @@ def plot_graph(graph, MST, column_clusters, cluster_colors):
     g.vs['width'] = 0.5
     g.es["width"] = 1.0  # Set edge width for tree edges
     igraph.plot(g, target=ax, layout=layout, bbox=(300, 300))
-
 
 def main():
     np.random.seed(0)
