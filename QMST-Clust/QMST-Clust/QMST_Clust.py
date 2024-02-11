@@ -1,9 +1,10 @@
 import time
 import numpy as np
-import igraph
-import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.cluster import KMeans
+import networkx as nx
+import matplotlib.pyplot as plt
+import igraph
 
 def q_learning(graph, num_episodes, learning_rate, discount_factor):
     Q = np.ones((len(graph), len(graph)))
@@ -14,7 +15,7 @@ def q_learning(graph, num_episodes, learning_rate, discount_factor):
         current_node = np.random.randint(len(graph))
         while True:
             # Select an action (next node) based on exploration or exploitation strategy
-            action = epsilon_greedy(Q[current_node], episode)
+            action = epsilon_greedy(Q[current_node])
             # Update the Q-table with Q-learning equation
             reward = -current_graph[current_node, action]  # Negative reward for selecting an edge
             Q[current_node, action] = (1 - learning_rate) * Q[current_node, action] + learning_rate * (
@@ -38,51 +39,41 @@ def epsilon_greedy(Q_values, epsilon=0.1):
     return action
 
 def get_minimum_spanning_tree(Q_table):
-    num_nodes = len(Q_table)
+    num_nodes = Q_table.shape[0]
     MST = np.zeros_like(Q_table)
 
-    # Create a list of all edges in the graph with their respective weights
-    edges = []
-    for i in range(num_nodes):
-        for j in range(i + 1, num_nodes):
-            edges.append((i, j, Q_table[i][j]))
+    # Create a list of all nodes
+    nodes = list(range(num_nodes))
 
-    # Sort the edges in increasing order of weight
-    edges.sort(key=lambda x: x[2])
+    # Select the starting node
+    start_node = nodes[0]
 
-    # Perform Kruskal's algorithm to construct a MST
-    parent = [i for i in range(num_nodes)]  # Stores the parent of each node
-    rank = [0] * num_nodes  # Stores the rank of each node
+    # Create a set to keep track of visited nodes
+    visited = set([start_node])
 
-    # Find the parent of a node using path compression
-    def find(parent, node):
-        if parent[node] != node:
-            parent[node] = find(parent, parent[node])
-        return parent[node]
+    # Set the maximum runtime to 5 minutes (300 seconds)
+    max_runtime = 300
+    start_time = time.time()
 
-    # Union two sets using rank
-    def union(parent, rank, x, y):
-        x_root = find(parent, x)
-        y_root = find(parent, y)
-        if rank[x_root] < rank[y_root]:
-            parent[x_root] = y_root
-        elif rank[x_root] > rank[y_root]:
-            parent[y_root] = x_root
-        else:
-            parent[y_root] = x_root
-            rank[x_root] += 1
+    # Iterate until all nodes are visited or the maximum runtime is reached
+    while len(visited) < num_nodes and time.time() - start_time < max_runtime:
+        min_weight = float('inf')
+        min_edge = None
 
-    # Iterate over all edges in increasing order of weight
-    for edge in edges:
-        x, y, weight = edge
-        x_root = find(parent, x)
-        y_root = find(parent, y)
-        if x_root != y_root:
-            MST[x][y] = 1
-            union(parent, rank, x_root, y_root)
+        # Find the minimum weight edge connecting a visited node and an unvisited node
+        for node in visited:
+            for neighbor in nodes:
+                if neighbor not in visited and Q_table[node, neighbor] < min_weight:
+                    min_weight = Q_table[node, neighbor]
+                    min_edge = (node, neighbor)
+
+        # Add the minimum weight edge to the MST
+        if min_edge is not None:
+            node1, node2 = min_edge
+            MST[node1, node2] = 1
+            visited.add(node2)
 
     return MST
-
 def plot_graph(graph, MST, column_clusters, cluster_colors):
     # Create an igraph graph from the adjacency matrix
     g = igraph.Graph.Adjacency(graph.tolist())
@@ -106,7 +97,6 @@ def plot_graph(graph, MST, column_clusters, cluster_colors):
     g.vs['width'] = 0.5
     g.es["width"] = 1.0  # Set edge width for tree edges
     igraph.plot(g, target=ax, layout=layout, bbox=(300, 300))
-
 def main():
     np.random.seed(0)
     start_time = time.time()
@@ -127,7 +117,7 @@ def main():
 
     learning_rate = 0.1
     discount_factor = 0.9
-    num_episodes = 1000
+    num_episodes = 500
     Q_table = q_learning(cluster_counts, num_episodes, learning_rate, discount_factor)
     MST = get_minimum_spanning_tree(Q_table)
 
@@ -147,11 +137,9 @@ def main():
     for cluster_idx, cells in cluster_cells.items():
         print(f"Cluster {cluster_idx}: Cells {cells}")
 
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print(f"Execution time: {execution_time} seconds")
-
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Execution time: {execution_time} seconds")
 
 if __name__ == '__main__':
-    main()
-
+     main()
