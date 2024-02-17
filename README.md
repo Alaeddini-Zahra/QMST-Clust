@@ -18,6 +18,8 @@ The provided data is synthesis data, only for test purposes.
 ##### Example 
 QMST_Clust.main()
 
+### Note
+The paper of the package is under review and the complete code will be published ASAP.
 
 
 
